@@ -67,26 +67,30 @@ namespace RTS
 				public static int GetAvatar (string playerName)
 				{
 						for (int i = 0; i < players.Count; i++) {
-								if (players [i].Name == playerName)
+								if (players [i].Name == playerName) {
 										return players [i].Avatar;
+								}
 						}
 						return 0;
 				}
 		
 				public static Texture2D GetPlayerAvatar ()
 				{
-						if (avatars == null)
+						if (avatars == null) {
 								return null;
-						if (currentPlayer.Avatar >= 0 && currentPlayer.Avatar < avatars.Length)
+						}
+						if (currentPlayer.Avatar >= 0 && currentPlayer.Avatar < avatars.Length) {
 								return avatars [currentPlayer.Avatar];
+						}
 						return null;
 				}
 		
 				public static string[] GetPlayerNames ()
 				{
 						string[] playerNames = new string[players.Count];
-						for (int i = 0; i < playerNames.Length; i++)
+						for (int i = 0; i < playerNames.Length; i++) {
 								playerNames [i] = players [i].Name;
+						}
 						return playerNames;
 				}
 		
@@ -112,8 +116,9 @@ namespace RTS
 
 										writer.WritePropertyName ("Players");
 										writer.WriteStartArray ();
-										foreach (PlayerDetails player in players)
+										foreach (PlayerDetails player in players) {
 												SavePlayer (writer, player);
+										}
 										writer.WriteEndArray ();
 					
 										writer.WriteEndObject ();
@@ -150,8 +155,9 @@ namespace RTS
 												while (reader.Read()) {
 														if (reader.Value != null) {
 																if (reader.TokenType == JsonToken.PropertyName) {
-																		if ((string)reader.Value == "Players")
+																		if ((string)reader.Value == "Players") {
 																				LoadPlayers (reader);
+																		}
 																}
 														}
 												}
@@ -163,10 +169,11 @@ namespace RTS
 				private static void LoadPlayers (JsonTextReader reader)
 				{
 						while (reader.Read()) {
-								if (reader.TokenType == JsonToken.StartObject)
+								if (reader.TokenType == JsonToken.StartObject) {
 										LoadPlayer (reader);
-								else if (reader.TokenType == JsonToken.EndArray)
+								} else if (reader.TokenType == JsonToken.EndArray) {
 										return;
+								}
 						}
 				}
 		

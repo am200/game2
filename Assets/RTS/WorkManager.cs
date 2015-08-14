@@ -60,10 +60,10 @@ namespace RTS {
 		
 		public static ResourceType GetResourceType(string type) {
 			switch(type) {
-				case "Money": return ResourceType.Money; break;
-				case "Power": return ResourceType.Power; break;
-				case "Ore": return ResourceType.Ore; break;
-				default: return ResourceType.Unknown; break;
+				case "Money": return ResourceType.Money;
+				case "Power": return ResourceType.Power;
+				case "Ore": return ResourceType.Ore;
+				default: return ResourceType.Unknown;
 			}
 		}
 		

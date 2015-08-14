@@ -8,7 +8,9 @@ public class Conquest : VictoryCondition {
 	}
 
 	public override bool GameFinished () {
-		if(players == null) return true;
+		if (players == null) {
+						return true;
+				}
 		int playersLeft = players.Length;
 		foreach(Player player in players) {
 			if(!PlayerMeetsConditions(player)) playersLeft--;

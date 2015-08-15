@@ -37,13 +37,13 @@ public class HUD : MonoBehaviour
 				resourceLimits = new Dictionary<ResourceType, int> ();
 				resourceImages = new Dictionary<ResourceType, Texture2D> ();
 				for (int i=0; i<resources.Length; i++) {
-						switch (resources [i].name) {
-						case "Money":
+						switch (resources [i].name.ToLower ()) {
+						case ResourceType.Money.ToString().ToLower():
 								resourceImages.Add (ResourceType.Money, resources [i]);
 								resourceValues.Add (ResourceType.Money, 0);
 								resourceLimits.Add (ResourceType.Money, 0);
 								break;
-						case "Power":
+						case ResourceType.Power.ToString().ToLower():
 								resourceImages.Add (ResourceType.Power, resources [i]);
 								resourceValues.Add (ResourceType.Power, 0);
 								resourceLimits.Add (ResourceType.Power, 0);
@@ -54,8 +54,8 @@ public class HUD : MonoBehaviour
 				}
 				Dictionary<ResourceType, Texture2D> resourceHealthBarTextures = new Dictionary<ResourceType, Texture2D> ();
 				for (int i=0; i<resourceHealthBars.Length; i++) {
-						switch (resourceHealthBars [i].name) {
-						case "ore":
+						switch (resourceHealthBars [i].name.ToLower ()) {
+						case ResourceType.Ore.ToString().ToLower():
 								resourceHealthBarTextures.Add (ResourceType.Ore, resourceHealthBars [i]);
 								break;
 						default:
@@ -341,7 +341,7 @@ public class HUD : MonoBehaviour
 		
 				if (GUI.Button (menuButtonPosition, "Menu")) {
 						PlayClick ();
-			MapManager.SetTimeScale(0.0f);
+						MapManager.SetTimeScale (0.0f);
 						PauseMenu pauseMenu = GetComponent<PauseMenu> ();
 						if (pauseMenu) {
 								pauseMenu.enabled = true;

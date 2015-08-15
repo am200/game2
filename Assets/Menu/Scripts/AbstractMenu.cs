@@ -5,7 +5,7 @@ using RTS;
 public abstract class AbstractMenu : MonoBehaviour
 {
 	
-	public GUISkin mySkin, selectionSkin;
+	public GUISkin mainSkin, selectionSkin;
 	public AudioClip clickSound;
 	public float clickVolume = 1.0f;
 	protected AudioElement audioElement;

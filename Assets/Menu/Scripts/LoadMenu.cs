@@ -2,38 +2,27 @@ using UnityEngine;
 using System.Collections.Generic;
 using RTS;
 
-public class LoadMenu : MonoBehaviour
+public class LoadMenu : AbstractMenu
 {
-
-		public GUISkin mainSkin, selectionSkin;
-		public AudioClip clickSound;
-		public float clickVolume = 1.0f;
-		private AudioElement audioElement;
 
 		void Start ()
 		{
-				Activate ();
-				if (clickVolume < 0.0f) {
-						clickVolume = 0.0f;
-				}
-				if (clickVolume > 1.0f) {
-						clickVolume = 1.0f;
-				}
-				List<AudioClip> sounds = new List<AudioClip> ();
-				List<float> volumes = new List<float> ();
-				sounds.Add (clickSound);
-				volumes.Add (clickVolume);
-				audioElement = new AudioElement (sounds, volumes, "LoadMenu", null);
+				base.Start("LoadMenu", 250);
 		}
 	
-		void Update ()
+		protected override void Update ()
 		{
 				if (Input.GetKeyDown (KeyCode.Escape)) {
 						CancelLoad ();
 				}
 		}
-	
-		void OnGUI ()
+
+	protected override void OnGUI ()
+	{
+		DrawMenu ();
+	}
+
+	protected override	void DrawMenu ()
 		{
 				if (SelectionList.MouseDoubleClick ()) {
 						PlayClick ();
@@ -70,24 +59,12 @@ public class LoadMenu : MonoBehaviour
 				SelectionList.Draw (selectionLeft, selectionTop, selectionWidth, selectionHeight, selectionSkin);
 		}
 	
-		private void PlayClick ()
-		{
-				if (audioElement != null) {
-						audioElement.Play (clickSound);
-				}
-		}
-	
-		private float GetMenuHeight ()
-		{
-				return 250 + GetMenuItemsHeight ();
-		}
-	
-		private float GetMenuItemsHeight ()
+		protected override float GetMenuItemsHeight ()
 		{
 				return ResourceManager.ButtonHeight + 2 * ResourceManager.Padding;
 		}
 	
-		public void Activate ()
+		public override void Activate ()
 		{
 				SelectionList.LoadEntries (PlayerManager.GetSavedGames ());
 		}

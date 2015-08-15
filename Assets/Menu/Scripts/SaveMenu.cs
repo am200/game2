@@ -16,7 +16,7 @@ public class SaveMenu : AbstractConfirmationMenu
 		{
 				if (confirmDialog.IsConfirming ()) {
 						string message = "\"" + saveName + "\" already exists. Do you wish to continue?";
-						confirmDialog.Show (message, mySkin);
+						confirmDialog.Show (message, mainSkin);
 				} else if (confirmDialog.MadeChoice ()) {
 						if (confirmDialog.ClickedYes ()) {
 								Execute ();
@@ -28,7 +28,7 @@ public class SaveMenu : AbstractConfirmationMenu
 								saveName = SelectionList.GetCurrentEntry ();
 								Execute ();
 						}
-						GUI.skin = mySkin;
+			GUI.skin = mainSkin;
 						DrawMenu ();
 						//handle enter being hit when typing in the text field
 						if (Event.current.keyCode == KeyCode.Return) {

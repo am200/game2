@@ -40,7 +40,7 @@ public abstract class AbstractConfirmationMenu : AbstractMenu
 			PlayClick ();
 			Execute ();
 		}
-		GUI.skin = mySkin;
+		GUI.skin = mainSkin;
 		DrawMenu ();
 		//handle enter being hit when typing in the text field
 		if (Event.current.keyCode == KeyCode.Return) {

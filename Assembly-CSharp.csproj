@@ -46,10 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AbstractConfirmationMenu.cs" />
-     <Compile Include="Assets\AbstractMenu.cs" />
      <Compile Include="Assets\Audio\AudioElement.cs" />
      <Compile Include="Assets\Menu\Scripts\AbstractButtonMenu.cs" />
+     <Compile Include="Assets\Menu\Scripts\AbstractConfirmationMenu.cs" />
+     <Compile Include="Assets\Menu\Scripts\AbstractMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\CampaignMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\ConfirmDialog.cs" />
      <Compile Include="Assets\Menu\Scripts\LoadMenu.cs" />

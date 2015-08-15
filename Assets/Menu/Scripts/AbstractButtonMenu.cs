@@ -27,7 +27,7 @@ public abstract class AbstractButtonMenu : AbstractMenu
 		protected override void DrawMenu ()
 		{
 				//default implementation for a menu consisting of a vertical list of buttons
-				GUI.skin = mySkin;
+		GUI.skin = mainSkin;
 				float menuHeight = GetMenuHeight ();
 		
 				float groupLeft = Screen.width / 2 - ResourceManager.MenuWidth / 2;

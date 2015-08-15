@@ -79,8 +79,9 @@ public class Harvester : Unit
 				if (!rotating && !moving) {
 						if (harvesting || emptying) {
 								Arms[] arms = GetComponentsInChildren<Arms> ();
-								foreach (Arms arm in arms)
+								foreach (Arms arm in arms) {
 										arm.GetComponent<Renderer> ().enabled = true;
+								}
 								if (harvesting) {
 										Collect ();
 										if (currentLoad >= capacity) {

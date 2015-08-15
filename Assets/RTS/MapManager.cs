@@ -24,7 +24,33 @@ namespace RTS
 				{
 						LoadMap ("MainMenu");
 				}
+			
+				public static Dictionary<string,string> GetMapValues ()
+				{
+						Dictionary<string,string> dict = new Dictionary<string,string> ();							
+						dict.Add ("Conquest", "Map");
+						dict.Add ("Survival", "Map1");
+						dict.Add ("AccumulateMoney", "Map2");
+						dict.Add ("EscortConvoy", "Map3");
+						dict.Add ("BuildWonder", "Map4");
+						return dict;
+				}
+
+		public static void CheckForMapNameAndLoad (string buttonName,string newLevel)
+
+		{	
+			string mapName;
+			if (MapManager.GetMapValues ().TryGetValue (buttonName, out mapName)) {
+				if (MapManager.CheckForLevelName (mapName)) {
+					ResourceManager.LevelName = newLevel;
+					MapManager.LoadMap (mapName);
+				}
+				//makes sure that the loaded level runs at normal speed
+				MapManager.setTimeScale (1.0f);
+			}
 
 		}
+		}
+
 }
 

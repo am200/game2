@@ -1,3 +1,5 @@
+using System;
+
 namespace RTS
 {
 		public enum CursorState

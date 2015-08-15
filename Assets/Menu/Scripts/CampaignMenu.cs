@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using RTS;
+using System.Collections.Generic;
 
 public class CampaignMenu : AbstractButtonMenu
 {
@@ -12,14 +13,7 @@ public class CampaignMenu : AbstractButtonMenu
 	
 		protected override void SetButtons ()
 		{
-				buttons = new string[] {
-					"Map",
-					"Map1",
-					"Map2",
-					"Map3",
-					"Map4",
-					"Exit"
-				};
+				buttons = (new List<string> (MapManager.GetMapValues ().Keys)).ToArray ();
 		}
 	
 		protected override void HandleButton (string text)
@@ -29,7 +23,7 @@ public class CampaignMenu : AbstractButtonMenu
 						ReturnToMainMenu ();
 						return;
 				}
-				startMap (text);
+				StartMap (text);
 		}
 	
 		protected override void HideCurrentMenu ()
@@ -37,23 +31,18 @@ public class CampaignMenu : AbstractButtonMenu
 				GetComponent<MainMenu> ().enabled = false;
 		}
 	
-		private void startMap (string mapName)
+		private void StartMap (string buttonName)
 		{
 				string newLevel = SelectionList.GetCurrentEntry ();
 				if (newLevel != "") {
-						ResourceManager.LevelName = newLevel;
-						if (MapManager.CheckForLevelName (mapName)) {
-								MapManager.LoadMap (mapName);
-						}
-						//makes sure that the loaded level runs at normal speed
-						MapManager.setTimeScale (1.0f);
+						MapManager.CheckForMapNameAndLoad (buttonName, newLevel);
 				}
 		}
 
 		private void ReturnToMainMenu ()
 		{
 				ResourceManager.LevelName = "";
-		MapManager.LoadMainMenu ();
+				MapManager.LoadMainMenu ();
 				Cursor.visible = true;
 		}
 }

@@ -3,36 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using RTS;
 
-public class Menu : MonoBehaviour
+public abstract class AbstractButtonMenu : AbstractMenu
 {
 	
-		public GUISkin mySkin;
-		public Texture2D header;
-		public AudioClip clickSound;
-		public float clickVolume = 1.0f;
 		protected string[] buttons;
-		private AudioElement audioElement;
-	
-		protected virtual void Start ()
+		public Texture2D header;
+		
+		protected override void Start (string menuAudioElementName, float menuHeight)
 		{
 				SetButtons ();
-				if (clickVolume < 0.0f)
-						clickVolume = 0.0f;
-				if (clickVolume > 1.0f)
-						clickVolume = 1.0f;
-				List<AudioClip> sounds = new List<AudioClip> ();
-				List<float> volumes = new List<float> ();
-				sounds.Add (clickSound);
-				volumes.Add (clickVolume);
-				audioElement = new AudioElement (sounds, volumes, "Menu", null);
+				base.Start (menuAudioElementName, menuHeight);
 		}
 	
-		protected virtual void OnGUI ()
+		protected override void OnGUI ()
 		{
 				DrawMenu ();
 		}
 	
-		protected virtual void DrawMenu ()
+		public override void Activate ()
+		{
+		}
+	
+		protected override void DrawMenu ()
 		{
 				//default implementation for a menu consisting of a vertical list of buttons
 				GUI.skin = mySkin;
@@ -69,10 +61,7 @@ public class Menu : MonoBehaviour
 				GUI.EndGroup ();
 		}
 	
-		protected virtual void SetButtons ()
-		{
-				//a child class needs to set this for buttons to appear
-		}
+		protected abstract void SetButtons ();
 	
 		protected virtual void HandleButton (string text)
 		{
@@ -82,36 +71,24 @@ public class Menu : MonoBehaviour
 				//a child class needs to set this to handle button clicks
 		}
 	
-		protected virtual float GetMenuHeight ()
+		protected override float GetMenuHeight ()
 		{
 				float buttonHeight = 0;
-		if (buttons != null) {
+				if (buttons != null) {
 						buttonHeight = buttons.Length * ResourceManager.ButtonHeight;
 				}
 				float paddingHeight = 2 * ResourceManager.Padding;
-			if (buttons != null){
-				paddingHeight += buttons.Length * ResourceManager.Padding;}
+				if (buttons != null) {
+						paddingHeight += buttons.Length * ResourceManager.Padding;
+				}
 				float messageHeight = ResourceManager.TextHeight + ResourceManager.Padding;
 				return ResourceManager.HeaderHeight + buttonHeight + paddingHeight + messageHeight;
 		}
-	
-		protected void LoadGame ()
+
+		protected override float GetMenuItemsHeight ()
 		{
-				HideCurrentMenu ();
-				LoadMenu loadMenu = GetComponent<LoadMenu> ();
-				if (loadMenu) {
-						loadMenu.enabled = true;
-						loadMenu.Activate ();
-				}
+				return ResourceManager.ButtonHeight + ResourceManager.TextHeight + 3 * ResourceManager.Padding;
 		}
 	
-		protected virtual void HideCurrentMenu ()
-		{
-				//a child class needs to set this to hide itself when appropriate
-		}
-	
-		protected void ExitGame ()
-		{
-				Application.Quit ();
-		}
+		protected abstract void HideCurrentMenu ();
 }

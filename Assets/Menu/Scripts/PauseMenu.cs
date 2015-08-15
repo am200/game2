@@ -1,18 +1,18 @@
 using UnityEngine;
 using RTS;
 
-public class PauseMenu : Menu
+public class PauseMenu : AbstractButtonMenu
 {
 
 		private Player player;
 	
-		protected override void Start ()
+		protected void Start ()
 		{
-				base.Start ();
+				base.Start ("PauseMenu", 250);
 				player = transform.root.GetComponent<Player> ();
 		}
 	
-		void Update ()
+		protected override void Update ()
 		{
 				if (Input.GetKeyDown (KeyCode.Escape)) {
 						Resume ();
@@ -76,6 +76,16 @@ public class PauseMenu : Menu
 				ResourceManager.LevelName = "";
 				Application.LoadLevel ("MainMenu");
 				Cursor.visible = true;
+		}
+
+		protected void LoadGame ()
+		{
+				HideCurrentMenu ();
+				LoadMenu loadMenu = GetComponent<LoadMenu> ();
+				if (loadMenu) {
+						loadMenu.enabled = true;
+						loadMenu.Activate ();
+				}
 		}
 	
 }

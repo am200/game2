@@ -2,82 +2,42 @@ using UnityEngine;
 using System.Collections.Generic;
 using RTS;
 
-public class SaveMenu : MonoBehaviour
+public class SaveMenu : AbstractConfirmationMenu
 {
-	
-		public GUISkin mySkin, selectionSkin, confirmationSkin;
-		public AudioClip clickSound;
-		public float clickVolume = 1.0f;
+
 		private string saveName = "NewGame";
-		private ConfirmDialog confirmDialog = new ConfirmDialog ();
-		private AudioElement audioElement;
-	
-		void Start ()
+
+		protected  void Start ()
 		{
-				Activate ();
-				if (clickVolume < 0.0f) {
-						clickVolume = 0.0f;
-				}
-				if (clickVolume > 1.0f) {
-						clickVolume = 1.0f;
-				}
-				List<AudioClip> sounds = new List<AudioClip> ();
-				List<float> volumes = new List<float> ();
-				sounds.Add (clickSound);
-				volumes.Add (clickVolume);
-				audioElement = new AudioElement (sounds, volumes, "SaveMenu", null);
+				base.Start ("SaveMenu", 250);
 		}
 	
-		void Update ()
-		{
-				//handle escape key	
-				if (Input.GetKeyDown (KeyCode.Escape)) {
-						if (confirmDialog.IsConfirming ()) {
-								confirmDialog.EndConfirmation ();
-						} else {
-								CancelSave ();
-						}
-				}
-				//handle enter key in confirmation dialog
-				if (Input.GetKeyDown (KeyCode.Return) && confirmDialog.IsConfirming ()) {
-						confirmDialog.EndConfirmation ();
-						SaveGame ();
-				}
-		}
-	
-		void OnGUI ()
+		protected override void OnGUI ()
 		{
 				if (confirmDialog.IsConfirming ()) {
 						string message = "\"" + saveName + "\" already exists. Do you wish to continue?";
 						confirmDialog.Show (message, mySkin);
 				} else if (confirmDialog.MadeChoice ()) {
 						if (confirmDialog.ClickedYes ()) {
-								SaveGame ();
+								Execute ();
 						}
 						confirmDialog.EndConfirmation ();
 				} else {
 						if (SelectionList.MouseDoubleClick ()) {
 								PlayClick ();
 								saveName = SelectionList.GetCurrentEntry ();
-								StartSave ();
+								Execute ();
 						}
 						GUI.skin = mySkin;
 						DrawMenu ();
 						//handle enter being hit when typing in the text field
 						if (Event.current.keyCode == KeyCode.Return) {
-								StartSave ();
+								Execute ();
 						}
 				}
 		}
 	
-		private void PlayClick ()
-		{
-				if (audioElement != null) {
-						audioElement.Play (clickSound);
-				}
-		}
-	
-		public void Activate ()
+		public override void Activate ()
 		{
 				SelectionList.LoadEntries (PlayerManager.GetSavedGames ());
 				if (ResourceManager.LevelName != null && ResourceManager.LevelName != "") {
@@ -85,7 +45,7 @@ public class SaveMenu : MonoBehaviour
 				}
 		}
 	
-		private void DrawMenu ()
+		protected override void DrawMenu ()
 		{
 				float menuHeight = GetMenuHeight ();
 				float groupLeft = Screen.width / 2 - ResourceManager.MenuWidth / 2;
@@ -100,12 +60,12 @@ public class SaveMenu : MonoBehaviour
 				float topPos = menuHeight - ResourceManager.Padding - ResourceManager.ButtonHeight;
 				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Save Game")) {
 						PlayClick ();
-						StartSave ();
+						Execute ();
 				}
 				leftPos += ResourceManager.ButtonWidth + ResourceManager.Padding;
 				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Cancel")) {
 						PlayClick ();
-						CancelSave ();
+						Cancel ();
 				}
 				//text area for player to type new name
 				float textTop = menuHeight - 2 * ResourceManager.Padding - ResourceManager.ButtonHeight - ResourceManager.TextHeight;
@@ -127,28 +87,13 @@ public class SaveMenu : MonoBehaviour
 						saveName = newSelection;
 				}
 		}
-	
-		private float GetMenuHeight ()
+
+		protected override bool CheckIfConfirmed ()
 		{
-				return 250 + GetMenuItemsHeight ();
+				return SelectionList.Contains (saveName);
 		}
-	
-		private float GetMenuItemsHeight ()
-		{
-				return ResourceManager.ButtonHeight + ResourceManager.TextHeight + 3 * ResourceManager.Padding;
-		}
-	
-		private void StartSave ()
-		{
-				//prompt for override of name if necessary
-				if (SelectionList.Contains (saveName)) {
-						confirmDialog.StartConfirmation (clickSound, audioElement);
-				} else {
-						SaveGame ();
-				}
-		}
-	
-		private void CancelSave ()
+
+		protected override void Cancel ()
 		{
 				GetComponent<SaveMenu> ().enabled = false;
 				PauseMenu pause = GetComponent<PauseMenu> ();
@@ -157,7 +102,7 @@ public class SaveMenu : MonoBehaviour
 				}
 		}
 	
-		private void SaveGame ()
+		protected override void Execute ()
 		{
 				SaveManager.SaveGame (saveName);
 				ResourceManager.LevelName = saveName;

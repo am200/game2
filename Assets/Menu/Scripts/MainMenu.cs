@@ -2,9 +2,14 @@ using UnityEngine;
 using System.Collections;
 using RTS;
 
-public class MainMenu : Menu
+public class MainMenu : AbstractButtonMenu
 {
-	
+
+		public void Start ()
+		{
+				base.Start ("MainMenu", 250);
+		}
+
 		void OnLevelWasLoaded ()
 		{
 				Cursor.visible = true;
@@ -57,10 +62,12 @@ public class MainMenu : Menu
 	
 		private void NewGame ()
 		{
-				ResourceManager.MenuOpen = false;
-				Application.LoadLevel ("Map");
-				//makes sure that the loaded level runs at normal speed
-				Time.timeScale = 1.0f;
+				HideCurrentMenu ();
+				CampaignMenu campaignMenu = GetComponent<CampaignMenu> ();
+				if (campaignMenu) {
+						campaignMenu.enabled = true;
+						campaignMenu.Activate ();
+				}
 		}
 	
 		private void ChangePlayer ()
@@ -68,5 +75,20 @@ public class MainMenu : Menu
 				GetComponent<MainMenu> ().enabled = false;
 				GetComponent<SelectPlayerMenu> ().enabled = true;
 				SelectionList.LoadEntries (PlayerManager.GetPlayerNames ());
+		}
+	
+		protected void LoadGame ()
+		{
+				HideCurrentMenu ();
+				LoadMenu loadMenu = GetComponent<LoadMenu> ();
+				if (loadMenu) {
+						loadMenu.enabled = true;
+						loadMenu.Activate ();
+				}
+		}
+	
+		protected void ExitGame ()
+		{
+				Application.Quit ();
 		}
 }

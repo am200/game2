@@ -20,4 +20,5 @@ namespace RTS
 				Ore,
 				Unknown
 		}
+
 }

@@ -5,13 +5,15 @@ using RTS;
 public class CampaignMenu : AbstractButtonMenu
 {
 
-		public void Start(){
-		base.Start("CampaignMenu",250);
-	}
+		public void Start ()
+		{
+				base.Start ("CampaignMenu", 250);
+		}
 	
 		protected override void SetButtons ()
 		{
 				buttons = new string[] {
+					"Map",
 					"Map1",
 					"Map2",
 					"Map3",
@@ -23,12 +25,10 @@ public class CampaignMenu : AbstractButtonMenu
 		protected override void HandleButton (string text)
 		{
 				base.HandleButton (text);
-
 				if (text.Equals ("Exit")) {
 						ReturnToMainMenu ();
 						return;
 				}
-
 				startMap (text);
 		}
 	
@@ -42,20 +42,18 @@ public class CampaignMenu : AbstractButtonMenu
 				string newLevel = SelectionList.GetCurrentEntry ();
 				if (newLevel != "") {
 						ResourceManager.LevelName = newLevel;
-						if (Application.loadedLevelName != mapName) {
-				Application.LoadLevel (mapName);
-				//makes sure that the loaded level runs at normal speed
-				Time.timeScale = 1.0f;
+						if (MapManager.CheckForLevelName (mapName)) {
+								MapManager.LoadMap (mapName);
 						}
 						//makes sure that the loaded level runs at normal speed
-						Time.timeScale = 1.0f;
+						MapManager.setTimeScale (1.0f);
 				}
 		}
 
 		private void ReturnToMainMenu ()
 		{
 				ResourceManager.LevelName = "";
-				Application.LoadLevel ("MainMenu");
+		MapManager.LoadMainMenu ();
 				Cursor.visible = true;
 		}
 }

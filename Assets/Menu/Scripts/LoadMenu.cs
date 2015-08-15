@@ -7,7 +7,7 @@ public class LoadMenu : AbstractMenu
 
 		void Start ()
 		{
-				base.Start("LoadMenu", 250);
+				base.Start ("LoadMenu", 250);
 		}
 	
 		protected override void Update ()
@@ -17,12 +17,12 @@ public class LoadMenu : AbstractMenu
 				}
 		}
 
-	protected override void OnGUI ()
-	{
-		DrawMenu ();
-	}
+		protected override void OnGUI ()
+		{
+				DrawMenu ();
+		}
 
-	protected override	void DrawMenu ()
+		protected override	void DrawMenu ()
 		{
 				if (SelectionList.MouseDoubleClick ()) {
 						PlayClick ();
@@ -74,10 +74,11 @@ public class LoadMenu : AbstractMenu
 				string newLevel = SelectionList.GetCurrentEntry ();
 				if (newLevel != "") {
 						ResourceManager.LevelName = newLevel;
-						if (Application.loadedLevelName != "BlankMap1") {
-								Application.LoadLevel ("BlankMap1");
-						} else if (Application.loadedLevelName != "BlankMap2") {
-								Application.LoadLevel ("BlankMap2");
+
+						if (MapManager.CheckForLevelName ("BlankMap1")) {
+								MapManager.LoadMap ("BlankMap1");
+						} else if (MapManager.CheckForLevelName ("BlankMap2")) {
+								MapManager.LoadMap ("BlankMap2");
 						}
 						//makes sure that the loaded level runs at normal speed
 						Time.timeScale = 1.0f;

@@ -46,7 +46,7 @@ public class AudioElement
 		{
 				GameObject temp;
 				if (soundObjects.TryGetValue (sound, out temp)) {
-						if (!temp.GetComponent<AudioSource> ().isPlaying) {
+			if (temp && temp.GetComponent<AudioSource> () && !temp.GetComponent<AudioSource> ().isPlaying) {
 								temp.GetComponent<AudioSource> ().Play ();
 						}
 				}

@@ -1,16 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Menu/Scripts/AbstractConfirmationMenu.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../RTS_Tutorial/unity-rts-demo/RTS Tutorial/Assets/Audio/AudioElement.cs">
     <Files>
-      <File FileName="Assets/Menu/Scripts/SelectPlayerMenu.cs" Line="38" Column="22" />
-      <File FileName="Assets/Menu/Scripts/SaveMenu.cs" Line="31" Column="24" />
-      <File FileName="Assets/Menu/Scripts/ResultsScreen.cs" Line="1" Column="1" />
-      <File FileName="Assets/Menu/Scripts/PauseMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets/Menu/Scripts/MainMenu.cs" Line="5" Column="43" />
-      <File FileName="Assets/Menu/Scripts/LoadMenu.cs" Line="68" Column="2" />
-      <File FileName="Assets/Menu/Scripts/AbstractMenu.cs" Line="8" Column="25" />
-      <File FileName="Assets/Menu/Scripts/AbstractButtonMenu.cs" Line="30" Column="22" />
-      <File FileName="Assets/Menu/Scripts/AbstractConfirmationMenu.cs" Line="43" Column="22" />
+      <File FileName="../RTS_Tutorial/unity-rts-demo/RTS Tutorial/Assets/Audio/AudioElement.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

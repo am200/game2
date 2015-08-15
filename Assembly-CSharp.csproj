@@ -64,6 +64,7 @@
      <Compile Include="Assets\Player\UserInput.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\LoadManager.cs" />
+     <Compile Include="Assets\RTS\MapManager.cs" />
      <Compile Include="Assets\RTS\PlayerManager.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
      <Compile Include="Assets\RTS\SaveManager.cs" />

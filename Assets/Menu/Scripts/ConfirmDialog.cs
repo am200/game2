@@ -72,13 +72,13 @@ public class ConfirmDialog
 		{
 				float buttonLeft = messageDimensions.x / 2 - buttonWidth - padding / 2;
 				float buttonTop = messageDimensions.y + padding;
-				if (GUI.Button (new Rect (buttonLeft, buttonTop, buttonWidth, buttonHeight), "Yes")) {
+				if (GUI.Button (new Rect (buttonLeft, buttonTop, buttonWidth, buttonHeight), ButtonManager.YES)) {
 						PlayClick ();
 						confirming = false;
 						clickYes = true;
 				}
 				buttonLeft += buttonWidth + padding;
-				if (GUI.Button (new Rect (buttonLeft, buttonTop, buttonWidth, buttonHeight), "No")) {
+				if (GUI.Button (new Rect (buttonLeft, buttonTop, buttonWidth, buttonHeight), ButtonManager.NO)) {
 						PlayClick ();
 						confirming = false;
 						clickNo = true;

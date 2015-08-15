@@ -5,17 +5,23 @@ using RTS;
 public class SaveMenu : AbstractConfirmationMenu
 {
 
-		private string saveName = "NewGame";
+		private string SAVE_NAME = "NewGame";
+		private readonly string SAVE_GAME_ALREADY_EXISTS = "\"%s\" already exists. Do you wish to continue?";
+
+		protected override string GetMenuName ()
+		{
+				return "SaveMenu";
+		}
 
 		protected  void Start ()
 		{
-				base.Start ("SaveMenu", 250);
+				base.Start (GetMenuName (), 250);
 		}
 	
 		protected override void OnGUI ()
 		{
 				if (confirmDialog.IsConfirming ()) {
-						string message = "\"" + saveName + "\" already exists. Do you wish to continue?";
+						string message = string.Format (SAVE_GAME_ALREADY_EXISTS, SAVE_NAME);
 						confirmDialog.Show (message, mainSkin);
 				} else if (confirmDialog.MadeChoice ()) {
 						if (confirmDialog.ClickedYes ()) {
@@ -25,10 +31,10 @@ public class SaveMenu : AbstractConfirmationMenu
 				} else {
 						if (SelectionList.MouseDoubleClick ()) {
 								PlayClick ();
-								saveName = SelectionList.GetCurrentEntry ();
+								SAVE_NAME = SelectionList.GetCurrentEntry ();
 								Execute ();
 						}
-			GUI.skin = mainSkin;
+						GUI.skin = mainSkin;
 						DrawMenu ();
 						//handle enter being hit when typing in the text field
 						if (Event.current.keyCode == KeyCode.Return) {
@@ -41,7 +47,7 @@ public class SaveMenu : AbstractConfirmationMenu
 		{
 				SelectionList.LoadEntries (PlayerManager.GetSavedGames ());
 				if (ResourceManager.LevelName != null && ResourceManager.LevelName != "") {
-						saveName = ResourceManager.LevelName;
+						SAVE_NAME = ResourceManager.LevelName;
 				}
 		}
 	
@@ -58,7 +64,7 @@ public class SaveMenu : AbstractConfirmationMenu
 				//menu buttons
 				float leftPos = ResourceManager.Padding;
 				float topPos = menuHeight - ResourceManager.Padding - ResourceManager.ButtonHeight;
-				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Save Game")) {
+				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), ButtonManager.SAVE_GAME)) {
 						PlayClick ();
 						Execute ();
 				}
@@ -70,8 +76,8 @@ public class SaveMenu : AbstractConfirmationMenu
 				//text area for player to type new name
 				float textTop = menuHeight - 2 * ResourceManager.Padding - ResourceManager.ButtonHeight - ResourceManager.TextHeight;
 				float textWidth = ResourceManager.MenuWidth - 2 * ResourceManager.Padding;
-				saveName = GUI.TextField (new Rect (ResourceManager.Padding, textTop, textWidth, ResourceManager.TextHeight), saveName, 60);
-				SelectionList.SetCurrentEntry (saveName);
+				SAVE_NAME = GUI.TextField (new Rect (ResourceManager.Padding, textTop, textWidth, ResourceManager.TextHeight), SAVE_NAME, 60);
+				SelectionList.SetCurrentEntry (SAVE_NAME);
 				GUI.EndGroup ();
 		
 				//selection list, needs to be called outside of the group for the menu
@@ -84,13 +90,13 @@ public class SaveMenu : AbstractConfirmationMenu
 				string newSelection = SelectionList.GetCurrentEntry ();
 				//set saveName to be name selected in list if selection has changed
 				if (prevSelection != newSelection) {
-						saveName = newSelection;
+						SAVE_NAME = newSelection;
 				}
 		}
 
 		protected override bool CheckIfConfirmed ()
 		{
-				return SelectionList.Contains (saveName);
+				return SelectionList.Contains (SAVE_NAME);
 		}
 
 		protected override void Cancel ()
@@ -104,8 +110,8 @@ public class SaveMenu : AbstractConfirmationMenu
 	
 		protected override void Execute ()
 		{
-				SaveManager.SaveGame (saveName);
-				ResourceManager.LevelName = saveName;
+				SaveManager.SaveGame (SAVE_NAME);
+				ResourceManager.LevelName = SAVE_NAME;
 				GetComponent<SaveMenu> ().enabled = false;
 				PauseMenu pause = GetComponent<PauseMenu> ();
 				if (pause) {

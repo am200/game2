@@ -5,9 +5,47 @@ using RTS;
 public class LoadMenu : AbstractMenu
 {
 
-		void Start ()
+		private readonly string BLANK_MAP_1 = "BlankMap1";
+		private readonly  string BLANK_MAP_2 = "BlankMap2";
+	
+		private void StartLoad ()
 		{
-				base.Start ("LoadMenu", 250);
+				string newLevel = SelectionList.GetCurrentEntry ();
+				if (newLevel != "") {
+						ResourceManager.LevelName = newLevel;
+			
+						if (MapManager.CheckForLevelName (BLANK_MAP_1)) {
+								MapManager.LoadMap (BLANK_MAP_1);
+						} else if (MapManager.CheckForLevelName (BLANK_MAP_2)) {
+								MapManager.LoadMap (BLANK_MAP_2);
+						}
+						//makes sure that the loaded level runs at normal speed
+						Time.timeScale = 1.0f;
+				}
+		}
+	
+		private void CancelLoad ()
+		{
+				GetComponent<LoadMenu> ().enabled = false;
+				PauseMenu pause = GetComponent<PauseMenu> ();
+				if (pause) {
+						pause.enabled = true;
+				} else {
+						MainMenu main = GetComponent<MainMenu> ();
+						if (main) {
+								main.enabled = true;
+						}
+				}
+		}
+
+		private void Start ()
+		{
+				base.Start (GetMenuName (), 250);
+		}
+	
+		protected override string GetMenuName ()
+		{
+				return "LoadMenu";
 		}
 	
 		protected override void Update ()
@@ -40,12 +78,12 @@ public class LoadMenu : AbstractMenu
 				//menu buttons
 				float leftPos = ResourceManager.Padding;
 				float topPos = menuHeight - ResourceManager.Padding - ResourceManager.ButtonHeight;
-				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Load Game")) {
+				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), ButtonManager.LOAD_GAME)) {
 						PlayClick ();
 						StartLoad ();
 				}
 				leftPos += ResourceManager.ButtonWidth + ResourceManager.Padding;
-				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), "Cancel")) {
+				if (GUI.Button (new Rect (leftPos, topPos, ResourceManager.ButtonWidth, ResourceManager.ButtonHeight), ButtonManager.CANCEL)) {
 						PlayClick ();
 						CancelLoad ();
 				}
@@ -68,35 +106,6 @@ public class LoadMenu : AbstractMenu
 		{
 				SelectionList.LoadEntries (PlayerManager.GetSavedGames ());
 		}
-	
-		private void StartLoad ()
-		{
-				string newLevel = SelectionList.GetCurrentEntry ();
-				if (newLevel != "") {
-						ResourceManager.LevelName = newLevel;
 
-						if (MapManager.CheckForLevelName ("BlankMap1")) {
-								MapManager.LoadMap ("BlankMap1");
-						} else if (MapManager.CheckForLevelName ("BlankMap2")) {
-								MapManager.LoadMap ("BlankMap2");
-						}
-						//makes sure that the loaded level runs at normal speed
-						Time.timeScale = 1.0f;
-				}
-		}
-	
-		private void CancelLoad ()
-		{
-				GetComponent<LoadMenu> ().enabled = false;
-				PauseMenu pause = GetComponent<PauseMenu> ();
-				if (pause) {
-						pause.enabled = true;
-				} else {
-						MainMenu main = GetComponent<MainMenu> ();
-						if (main) {
-								main.enabled = true;
-						}
-				}
-		}
 
 }

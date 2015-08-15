@@ -6,9 +6,14 @@ using System.Collections.Generic;
 public class CampaignMenu : AbstractButtonMenu
 {
 
+	protected override string GetMenuName ()
+	{
+		return "CampaignMenu";
+	}
+
 		public void Start ()
 		{
-				base.Start ("CampaignMenu", 250);
+				base.Start (GetMenuName(), 250);
 		}
 	
 		protected override void SetButtons ()

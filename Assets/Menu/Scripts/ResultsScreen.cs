@@ -2,28 +2,33 @@ using UnityEngine;
 using System.Collections.Generic;
 using RTS;
 
-public class ResultsScreen : MonoBehaviour
+public class ResultsScreen : AbstractMenu
 {
 	
-		public GUISkin skin;
-		public AudioClip clickSound;
-		public float clickVolume = 1.0f;
-		private AudioElement audioElement;
 		private Player winner;
 		private VictoryCondition metVictoryCondition;
+		private readonly string GAME_OVER = "Game Over";
+		private readonly string WIN_MESSAGE = "Congratulations %s! You have won by %s";
+
+		protected override string GetMenuName ()
+		{
+				return "ResultsScreen";
+		}
 	
 		void Start ()
 		{
-				List<AudioClip> sounds = new List<AudioClip> ();
-				List<float> volumes = new List<float> ();
-				sounds.Add (clickSound);
-				volumes.Add (clickVolume);
-				audioElement = new AudioElement (sounds, volumes, "ResultsScreen", null);
+		
+				base.Start (GetMenuName (), 250);
 		}
 	
-		void OnGUI ()
+		protected override void OnGUI ()
 		{
-				GUI.skin = skin;
+				DrawMenu ();
+		}
+
+		protected override void DrawMenu ()
+		{
+				GUI.skin = mainSkin;
 		
 				GUI.BeginGroup (new Rect (0, 0, Screen.width, Screen.height));
 		
@@ -34,35 +39,32 @@ public class ResultsScreen : MonoBehaviour
 				float leftPos = padding;
 				float topPos = padding;
 				GUI.Box (new Rect (0, 0, Screen.width, Screen.height), "");
-				string message = "Game Over";
+				string message = GAME_OVER;
 				if (winner) {
-						message = "Congratulations " + winner.username + "! You have won by " + metVictoryCondition.GetDescription ();
+						message = string.Format (WIN_MESSAGE, winner.username, metVictoryCondition.GetDescription ());
 				}
 				GUI.Label (new Rect (leftPos, topPos, Screen.width - 2 * padding, itemHeight), message);
 				leftPos = Screen.width / 2 - padding / 2 - buttonWidth;
 				topPos += itemHeight + padding;
-				if (GUI.Button (new Rect (leftPos, topPos, buttonWidth, itemHeight), "New Game")) {
+				if (GUI.Button (new Rect (leftPos, topPos, buttonWidth, itemHeight), ButtonManager.NEW_GAME)) {
 						PlayClick ();
 						//makes sure that the loaded level runs at normal speed
 						Time.timeScale = 1.0f;
 						ResourceManager.MenuOpen = false;
-						Application.LoadLevel ("Map");
+						MapManager.LoadMap("Map");
 				}
 				leftPos += padding + buttonWidth;
-				if (GUI.Button (new Rect (leftPos, topPos, buttonWidth, itemHeight), "Main Menu")) {
+				if (GUI.Button (new Rect (leftPos, topPos, buttonWidth, itemHeight), ButtonManager.MAIN_MENU)) {
 						ResourceManager.LevelName = "";
-						Application.LoadLevel ("MainMenu");
+						MapManager.LoadMainMenu ();
 						Cursor.visible = true;
 				}
 		
 				GUI.EndGroup ();
 		}
-	
-		private void PlayClick ()
+
+		public override void Activate ()
 		{
-				if (audioElement != null) {
-						audioElement.Play (clickSound);
-				}
 		}
 	
 		public void SetMetVictoryCondition (VictoryCondition victoryCondition)

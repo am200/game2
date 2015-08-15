@@ -10,6 +10,8 @@ public abstract class AbstractMenu : MonoBehaviour
 	public float clickVolume = 1.0f;
 	protected AudioElement audioElement;
 	private float menuHeight;
+
+	protected abstract string GetMenuName ();
 	
 	protected virtual void Start (string menuAudioElementName, float menuHeight)
 	{

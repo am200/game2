@@ -5,10 +5,15 @@ public class PauseMenu : AbstractButtonMenu
 {
 
 		private Player player;
+
+		protected override string GetMenuName ()
+		{
+				return "PauseMenu";
+		}
 	
 		protected void Start ()
 		{
-				base.Start ("PauseMenu", 250);
+				base.Start (GetMenuName (), 250);
 				player = transform.root.GetComponent<Player> ();
 		}
 	
@@ -21,7 +26,7 @@ public class PauseMenu : AbstractButtonMenu
 	
 		protected override void SetButtons ()
 		{
-				buttons = new string[] {"Resume", "Save Game", "Load Game", "Exit Game"};
+				buttons = ButtonManager.GetPauseMenuButtons ();
 		}
 	
 		protected override void HandleButton (string text)
@@ -41,6 +46,7 @@ public class PauseMenu : AbstractButtonMenu
 						ReturnToMainMenu ();
 						break;
 				default:
+						Debug.Log ("No method defined for " + text);
 						break;
 				}
 		}
@@ -52,7 +58,7 @@ public class PauseMenu : AbstractButtonMenu
 	
 		private void Resume ()
 		{
-				Time.timeScale = 1.0f;
+				MapManager.SetTimeScale (1.0f);
 				GetComponent<PauseMenu> ().enabled = false;
 				if (player) {
 						player.GetComponent<UserInput> ().enabled = true;
@@ -74,7 +80,7 @@ public class PauseMenu : AbstractButtonMenu
 		private void ReturnToMainMenu ()
 		{
 				ResourceManager.LevelName = "";
-				Application.LoadLevel ("MainMenu");
+				MapManager.LoadMainMenu ();
 				Cursor.visible = true;
 		}
 

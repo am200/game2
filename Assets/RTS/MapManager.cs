@@ -15,7 +15,7 @@ namespace RTS
 						Application.LoadLevel (mapName);
 				}
 
-				public static void setTimeScale (float timeScale)
+				public static void SetTimeScale (float timeScale)
 				{
 						Time.timeScale = timeScale;
 				}
@@ -36,20 +36,19 @@ namespace RTS
 						return dict;
 				}
 
-		public static void CheckForMapNameAndLoad (string buttonName,string newLevel)
+				public static void CheckForMapNameAndLoad (string buttonName, string newLevel)
+				{	
+						string mapName;
+						if (GetMapValues ().TryGetValue (buttonName, out mapName)) {
+								if (CheckForLevelName (mapName)) {
+										ResourceManager.LevelName = newLevel;
+										LoadMap (mapName);
+								}
+								//makes sure that the loaded level runs at normal speed
+								SetTimeScale (1.0f);
+						}
 
-		{	
-			string mapName;
-			if (MapManager.GetMapValues ().TryGetValue (buttonName, out mapName)) {
-				if (MapManager.CheckForLevelName (mapName)) {
-					ResourceManager.LevelName = newLevel;
-					MapManager.LoadMap (mapName);
 				}
-				//makes sure that the loaded level runs at normal speed
-				MapManager.setTimeScale (1.0f);
-			}
-
-		}
 		}
 
 }

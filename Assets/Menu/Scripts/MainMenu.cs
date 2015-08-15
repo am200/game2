@@ -5,9 +5,14 @@ using RTS;
 public class MainMenu : AbstractButtonMenu
 {
 
+		protected override string GetMenuName ()
+		{
+				return "MainMenu";
+		}
+
 		public void Start ()
 		{
-				base.Start ("MainMenu", 250);
+				base.Start (GetMenuName (), 250);
 		}
 
 		void OnLevelWasLoaded ()
@@ -26,12 +31,7 @@ public class MainMenu : AbstractButtonMenu
 	
 		protected override void SetButtons ()
 		{
-				buttons = new string[] {
-						"New Game",
-						"Load Game",
-						"Change Player",
-						"Quit Game"
-				};
+				buttons = ButtonManager.GetMainMenuButtons ();
 		}
 	
 		protected override void HandleButton (string text)
@@ -51,6 +51,7 @@ public class MainMenu : AbstractButtonMenu
 						ChangePlayer ();
 						break;
 				default:
+						Debug.Log ("No method defined for " + text);
 						break;
 				}
 		}

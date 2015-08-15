@@ -10,8 +10,9 @@ public class AudioElement
 	
 		public AudioElement (List<AudioClip> sounds, List<float> volumes, string id, Transform parentTransform)
 		{
-				if (sounds == null || sounds.Count == 0 || volumes == null || volumes.Count == 0 || sounds.Count != volumes.Count)
+				if (sounds == null || sounds.Count == 0 || volumes == null || volumes.Count == 0 || sounds.Count != volumes.Count) {
 						return;
+				}
 				element = new GameObject ("AudioElement_" + id);
 				if (parentTransform) {
 						element.transform.parent = parentTransform;
@@ -28,7 +29,8 @@ public class AudioElement
 	
 		public void Add (List<AudioClip> sounds, List<float> volumes)
 		{
-				for (int i = 0; i < sounds.Count; i++) {
+				int i = 0;
+				foreach (AudioClip AudioClip in sounds) {
 						AudioClip sound = sounds [i];
 						if (!sound) {
 								continue;
@@ -39,6 +41,7 @@ public class AudioElement
 						temp.GetComponent<AudioSource> ().volume = volumes [i];
 						temp.transform.parent = element.transform;
 						soundObjects.Add (sound, temp);
+						i++;
 				}
 		}
 	
@@ -46,7 +49,7 @@ public class AudioElement
 		{
 				GameObject temp;
 				if (soundObjects.TryGetValue (sound, out temp)) {
-			if (temp && temp.GetComponent<AudioSource> () && !temp.GetComponent<AudioSource> ().isPlaying) {
+						if (temp && temp.GetComponent<AudioSource> () && !temp.GetComponent<AudioSource> ().isPlaying) {
 								temp.GetComponent<AudioSource> ().Play ();
 						}
 				}

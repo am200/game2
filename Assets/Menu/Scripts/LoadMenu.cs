@@ -20,7 +20,7 @@ public class LoadMenu : AbstractMenu
 								MapManager.LoadMap (BLANK_MAP_2);
 						}
 						//makes sure that the loaded level runs at normal speed
-						Time.timeScale = 1.0f;
+			MapManager.SetTimeScale(1.0f);
 				}
 		}
 	

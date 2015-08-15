@@ -49,7 +49,7 @@ public class ResultsScreen : AbstractMenu
 				if (GUI.Button (new Rect (leftPos, topPos, buttonWidth, itemHeight), ButtonManager.NEW_GAME)) {
 						PlayClick ();
 						//makes sure that the loaded level runs at normal speed
-						Time.timeScale = 1.0f;
+			MapManager.SetTimeScale(1.0f);
 						ResourceManager.MenuOpen = false;
 						MapManager.LoadMap("Map");
 				}

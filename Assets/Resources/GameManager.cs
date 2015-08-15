@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 										ResultsScreen resultsScreen = hud.GetComponent<ResultsScreen> ();
 										resultsScreen.SetMetVictoryCondition (victoryCondition);
 										resultsScreen.enabled = true;
-										Time.timeScale = 0.0f;
+					MapManager.SetTimeScale(0.0f);
 										Cursor.visible = true;
 										ResourceManager.MenuOpen = true;
 										hud.enabled = false;

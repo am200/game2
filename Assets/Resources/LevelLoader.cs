@@ -46,7 +46,7 @@ public class LevelLoader : MonoBehaviour
 						} else {
 								SetObjectIds ();
 						}
-						Time.timeScale = 1.0f;
+			MapManager.SetTimeScale(1.0f);
 						ResourceManager.MenuOpen = false;
 				}
 		}

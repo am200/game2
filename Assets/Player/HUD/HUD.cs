@@ -341,7 +341,7 @@ public class HUD : MonoBehaviour
 		
 				if (GUI.Button (menuButtonPosition, "Menu")) {
 						PlayClick ();
-						Time.timeScale = 0.0f;
+			MapManager.SetTimeScale(0.0f);
 						PauseMenu pauseMenu = GetComponent<PauseMenu> ();
 						if (pauseMenu) {
 								pauseMenu.enabled = true;

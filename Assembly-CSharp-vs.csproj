@@ -58,6 +58,13 @@
      <Compile Include="Assets\Menu\Scripts\ResultsScreen.cs" />
      <Compile Include="Assets\Menu\Scripts\SaveMenu.cs" />
      <Compile Include="Assets\Menu\Scripts\SelectPlayerMenu.cs" />
+     <Compile Include="Assets\PathFinding\Grid.cs" />
+     <Compile Include="Assets\PathFinding\Heap.cs" />
+     <Compile Include="Assets\PathFinding\Node.cs" />
+     <Compile Include="Assets\PathFinding\PathFinding.cs" />
+     <Compile Include="Assets\PathFinding\PathRequest.cs" />
+     <Compile Include="Assets\PathFinding\PathRequestManager.cs" />
+     <Compile Include="Assets\PathFinding\PathUnit.cs" />
      <Compile Include="Assets\Player\HUD\HUD.cs" />
      <Compile Include="Assets\Player\Player.cs" />
      <Compile Include="Assets\Player\RallyPoint\RallyPoint.cs" />

@@ -2,6 +2,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using RTS;
+using System.Collections;
 
 public class Unit : WorldObject
 {
@@ -14,6 +15,12 @@ public class Unit : WorldObject
 		private Quaternion targetRotation;
 		private GameObject destinationTarget;
 		private int loadedDestinationTargetId = -1;
+		public bool enableMovement;
+
+
+		// A* algorithm attributes
+		Vector3[] path;
+		int targetIndex;
 	
 		/*** Game Engine methods, all can be overridden by subclass ***/
 	
@@ -57,11 +64,15 @@ public class Unit : WorldObject
 		protected override void Update ()
 		{
 				base.Update ();
+				if (enableMovement) {
+				
 				if (rotating) {
 						TurnToTarget ();
 				} else if (moving) {
-						MakeMove ();
+								MakeMove ();
+	
 				}
+			}
 		}
 	
 		protected override void OnGUI ()
@@ -121,8 +132,11 @@ public class Unit : WorldObject
 	
 		public virtual void StartMove (Vector3 destination)
 		{
-				if (audioElement != null)
+				if (audioElement != null) {
 						audioElement.Play (moveSound);
+				}
+
+				Debug.Log ("current position " + transform.position + " destination " + destination);
 				this.destination = destination;
 				destinationTarget = null;
 				targetRotation = Quaternion.LookRotation (destination - transform.position);
@@ -188,7 +202,19 @@ public class Unit : WorldObject
 	
 		private void TurnToTarget ()
 		{
-				transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, rotateSpeed);
+			
+				TurnToTarget (transform.rotation, targetRotation);
+		
+				CheckForCorrectRotation (transform.rotation, targetRotation);
+		}
+
+		private void TurnToTarget (Quaternion rotation, Quaternion targetRotation)
+		{
+				transform.rotation = Quaternion.RotateTowards (rotation, targetRotation, rotateSpeed);
+		}
+
+		private void CheckForCorrectRotation (Quaternion rotation, Quaternion targetRotation)
+		{
 				CalculateBounds ();
 				//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
 				Quaternion inverseTargetRotation = new Quaternion (-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
@@ -201,9 +227,48 @@ public class Unit : WorldObject
 						if (audioElement != null) {
 								audioElement.Play (driveSound);
 						}
+				} else {
+						rotating = true;
+						moving = false;
+				}
+		}
+
+		private void FindPath (Vector3 targetPosition)
+		{
+				PathRequestManager.RequestPath (transform.position, targetPosition, OnPathFound);
+		}
+
+		public void OnPathFound (Vector3[] newPath, bool pathSuccessful)
+		{
+				if (pathSuccessful) {
+						path = newPath;
+						StopCoroutine ("FollowPath");
+						StartCoroutine ("FollowPath");
 				}
 		}
 	
+		IEnumerator FollowPath ()
+		{
+				if (path != null && path.Length > 0) {
+		
+						Vector3 currentWaypoint = path [0];
+			
+						while (true) {
+								if (transform.position == currentWaypoint) {
+										targetIndex++;
+										if (targetIndex >= path.Length) {
+												yield break;
+										}
+										currentWaypoint = path [targetIndex];
+								}
+								transform.position = Vector3.MoveTowards (transform.position, currentWaypoint, moveSpeed * Time.deltaTime);
+				
+								yield return null;
+						}
+				
+				}
+		}
+
 		private void CalculateTargetDestination ()
 		{
 				//calculate number of unit vectors from unit centre to unit edge of bounds
@@ -241,17 +306,41 @@ public class Unit : WorldObject
 				}
 				destination.y = destinationTarget.transform.position.y;
 		}
+
+		public void OnDrawGizmos ()
+		{
+		
+				if (path != null) {
+						for (int i = targetIndex; i < path.Length; i++) {
+								Gizmos.color = Color.black;
+								Gizmos.DrawCube (path [i], Vector3.one);
+								if (i == targetIndex) {
+										Gizmos.DrawLine (transform.position, path [i]);
+								} else {
+										Gizmos.DrawLine (path [i - 1], path [i]);
+								}
+						}
+				}
+		}
 	
 		private void MakeMove ()
 		{
-				transform.position = Vector3.MoveTowards (transform.position, destination, Time.deltaTime * moveSpeed);
-				if (transform.position == destination) {
-						moving = false;
-						movingIntoPosition = false;
-						if (audioElement != null) {
-								audioElement.Stop (driveSound);
+
+				if (transform.position != destination) {
+						targetRotation = Quaternion.LookRotation (destination - transform.position);
+
+						CheckForCorrectRotation (Quaternion.LookRotation (transform.position), targetRotation);
+//				transform.position = Vector3.MoveTowards (transform.position, destination, Time.deltaTime * moveSpeed);
+		
+						FindPath (destination);
+						if (transform.position == destination) {
+								moving = false;
+								movingIntoPosition = false;
+								if (audioElement != null) {
+										audioElement.Stop (driveSound);
+								}
 						}
+						CalculateBounds ();
 				}
-				CalculateBounds ();
 		}
 }

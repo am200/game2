@@ -38,12 +38,12 @@ public class HUD : MonoBehaviour
 				resourceImages = new Dictionary<ResourceType, Texture2D> ();
 				for (int i=0; i<resources.Length; i++) {
 						switch (resources [i].name.ToLower ()) {
-						case ResourceType.Money.ToString().ToLower():
+						case "money":
 								resourceImages.Add (ResourceType.Money, resources [i]);
 								resourceValues.Add (ResourceType.Money, 0);
 								resourceLimits.Add (ResourceType.Money, 0);
 								break;
-						case ResourceType.Power.ToString().ToLower():
+						case "power":
 								resourceImages.Add (ResourceType.Power, resources [i]);
 								resourceValues.Add (ResourceType.Power, 0);
 								resourceLimits.Add (ResourceType.Power, 0);
@@ -55,7 +55,7 @@ public class HUD : MonoBehaviour
 				Dictionary<ResourceType, Texture2D> resourceHealthBarTextures = new Dictionary<ResourceType, Texture2D> ();
 				for (int i=0; i<resourceHealthBars.Length; i++) {
 						switch (resourceHealthBars [i].name.ToLower ()) {
-						case ResourceType.Ore.ToString().ToLower():
+						case "ore":
 								resourceHealthBarTextures.Add (ResourceType.Ore, resourceHealthBars [i]);
 								break;
 						default:
